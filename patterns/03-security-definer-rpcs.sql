@@ -40,8 +40,10 @@ end;
 $$;
 
 -- Client-side callers reach this via supabase.rpc('void_invoice', {...}).
--- Lock down who may even call it:
-revoke execute on function public.void_invoice(uuid, text) from anon;
+-- Lock down who may even call it. Postgres grants EXECUTE on new functions
+-- to PUBLIC by default, so revoking from `anon` alone removes nothing: anon
+-- would still inherit execute through PUBLIC. Revoke from PUBLIC first.
+revoke execute on function public.void_invoice(uuid, text) from public;
 grant  execute on function public.void_invoice(uuid, text) to authenticated;
 
 -- ============================================================================

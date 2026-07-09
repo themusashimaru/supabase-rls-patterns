@@ -49,14 +49,14 @@ create policy "documents: staff upload"
   on storage.objects for insert
   with check (
     bucket_id = 'documents'
-    and public.current_role() in ('member', 'manager', 'admin')  -- from 02
+    and public.app_role() in ('member', 'manager', 'admin')  -- from 02
   );
 
 create policy "documents: elevated read"
   on storage.objects for select
   using (
     bucket_id = 'documents'
-    and public.current_role() in ('manager', 'admin')
+    and public.app_role() in ('manager', 'admin')
   );
 
 -- No update policy: documents are immutable once uploaded (re-upload under a

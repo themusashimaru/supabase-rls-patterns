@@ -26,7 +26,7 @@ create policy "profiles: read own"
 
 -- Role-check helper. SECURITY DEFINER so it can read profiles regardless of
 -- the caller's policies; STABLE so the planner caches it per statement.
-create or replace function public.current_role()
+create or replace function public.app_role()
 returns text
 language sql
 stable
@@ -51,7 +51,7 @@ create policy "expenses: own or elevated select"
   on public.expenses for select
   using (
     (select auth.uid()) = user_id
-    or public.current_role() in ('manager', 'admin')
+    or public.app_role() in ('manager', 'admin')
   );
 
 create policy "expenses: members insert own"
@@ -60,7 +60,7 @@ create policy "expenses: members insert own"
 
 create policy "expenses: admin delete"
   on public.expenses for delete
-  using (public.current_role() = 'admin');
+  using (public.app_role() = 'admin');
 
 -- Note what is absent: no UPDATE policy, so nobody edits an expense after
 -- filing through the client API. Corrections happen through an audited RPC.
