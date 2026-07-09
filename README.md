@@ -13,6 +13,7 @@ RLS is the best feature of building on Postgres and the easiest one to get subtl
 | `patterns/03-security-definer-rpcs.sql` | Controlled RLS bypass with `security definer` functions, and the `search_path` bug that breaks auth triggers |
 | `patterns/04-storage-policies.sql` | Bucket policies: per-user folders, role-gated documents |
 | `patterns/05-gotchas.sql` | Backup tables, missing-verb policies, views, and other ways RLS silently fails |
+| `audit/rls-audit.sql` | Five queries that turn the gotchas into a pre-deploy check: RLS-off tables, policy-less tables, `using(true)` holes, verb coverage, definer functions missing `search_path`. Every returned row is a finding; wire it into CI |
 
 ## Ground rules that prevent most RLS incidents
 
